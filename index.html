@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RezxOfficial</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #001a1a, #000);
+      font-family: 'Orbitron', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #00ffee;
+      overflow-x: hidden;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+    .fade-in { animation: fadeIn 0.4s forwards; }
+    .fade-out { animation: fadeOut 0.4s forwards; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-20px); }
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin: 15px 0;
+      text-shadow: 0 0 10px #00ffee;
+    }
+
+    .clock {
+      font-size: 0.9em;
+      margin-bottom: 15px;
+      color: #7fffd4;
+      text-shadow: 0 0 6px #00ffee;
+    }
+
+    .thumbnail {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #00ffee;
+      margin: 0 auto 20px auto;
+      display: block;
+    }
+
+    .button, .back-btn, .qr-download-btn {
+      background: linear-gradient(135deg, #00ffee, #007777);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      box-shadow: 0 0 15px #00ffee;
+      transition: transform 0.3s ease;
+    }
+
+    .button:hover, .back-btn:hover, .qr-download-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .payment-info {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s ease;
+    }
+
+    .payment-info.show {
+      max-height: 1200px;
+    }
+
+    .copy-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      gap: 18px;
+    }
+
+    .dana-box {
+      background: rgba(0, 30, 30, 0.8);
+      color: #00ffee;
+      padding: 12px 20px;
+      border: 2px solid #00ffee;
+      border-radius: 14px;
+      font-size: 1em;
+      font-weight: bold;
+      box-shadow: 0 0 20px #00ffee;
+      width: 100%;
+    }
+
+    .copy-button, .confirm-button {
+      background: #00ffee;
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffee;
+    }
+
+    .copied-msg {
+      background: #000;
+      padding: 10px 15px;
+      border-radius: 6px;
+      color: #00ffee;
+      font-weight: bold;
+      border-left: 5px solid #00ffee;
+      animation: popin 0.3s ease forwards;
+    }
+
+    @keyframes popin {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes popout {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(0); opacity: 0; }
+    }
+
+    .qris-container {
+      padding: 6px;
+      border: 2px solid #00ffee;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ffee;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .qris-container.expanded {
+      transform: scale(1.5);
+    }
+
+    .qris-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+    }
+
+    .qr-download-btn {
+      display: none;
+      margin-top: 35px;
+    }
+
+    .footer-tag {
+      margin-top: 25px;
+      font-size: 0.75em;
+      color: #555;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <!-- HOME -->
+    <div id="homePage">
+      <img src="https://files.catbox.moe/nvjfem.jpg" class="thumbnail">
+      <h1>RezxOfficial PAYMENT</h1>
+      <div class="clock" id="clock"></div>
+      <button class="button" onclick="goToPayment()">ACCESS PAYMENT</button>
+    </div>
+
+    <!-- PAYMENT -->
+    <div id="paymentPage" class="hidden">
+      <img src="https://files.catbox.moe/nvjfem.jpg" class="thumbnail">
+      <h1>RezxOfficial</h1>
+      <div class="clock" id="clock2"></div>
+
+      <button class="button" onclick="togglePaymentInfo()">SHOW PAYMENT</button>
+
+      <div class="payment-info" id="paymentInfo">
+        <div class="copy-section">
+
+          <div class="qris-container" id="qrisContainer">
+            <img src="https://files.catbox.moe/2ellqq.jpg" class="qris-img" id="qrisImage">
+          </div>
+
+          <button class="qr-download-btn" id="qrDownloadBtn" onclick="downloadQR()">DOWNLOAD QR</button>
+
+          <div class="dana-box">
+            DANA: <span id="danaNumber">0895381059816</span>
+          </div>
+
+          <button class="copy-button" onclick="copyDana()">COPY NUMBER</button>
+
+          <div id="copiedMessage" style="display:none;" class="copied-msg">
+            NUMBER COPIED
+            <button class="confirm-button" onclick="hideCopiedMessage()">OK</button>
+          </div>
+
+        </div>
+      </div>
+
+      <button class="back-btn" onclick="backToHome()">BACK</button>
+
+      <div class="footer-tag">
+        RezxOfficial STYLE
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const qris = document.getElementById('qrisContainer');
+    const qrBtn = document.getElementById('qrDownloadBtn');
+    const qrisImage = document.getElementById('qrisImage');
+
+    qris.addEventListener('click', () => {
+      qris.classList.toggle('expanded');
+      qrBtn.style.display = qris.classList.contains('expanded') ? 'inline-block' : 'none';
+    });
+
+    function downloadQR() {
+      const link = document.createElement('a');
+      link.href = qrisImage.src;
+      link.download = 'qris-RezxOfficial.png';
+      link.click();
+    }
+
+    function togglePaymentInfo() {
+      document.getElementById('paymentInfo').classList.toggle('show');
+    }
+
+    function copyDana() {
+      const dana = document.getElementById('danaNumber').innerText;
+      navigator.clipboard.writeText(dana);
+      document.getElementById('copiedMessage').style.display = 'block';
+    }
+
+    function hideCopiedMessage() {
+      const msg = document.getElementById('copiedMessage');
+      msg.style.animation = 'popout 0.3s ease forwards';
+      setTimeout(() => {
+        msg.style.display = 'none';
+        msg.style.animation = '';
+      }, 300);
+    }
+
+    function goToPayment() {
+      homePage.classList.add("hidden");
+      paymentPage.classList.remove("hidden");
+    }
+
+    function backToHome() {
+      paymentPage.classList.add("hidden");
+      homePage.classList.remove("hidden");
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('id-ID');
+      const date = now.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      document.getElementById('clock').innerText = `${date} | ${time}`;
+      document.getElementById('clock2').innerText = `${date} | ${time}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
